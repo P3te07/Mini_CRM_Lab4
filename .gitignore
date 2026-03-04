@@ -1,0 +1,32 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# Node (dacă folosești npm/live-server)
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# Temp files
+*.tmp
+*.temp
+~$*
