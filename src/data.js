@@ -1,6 +1,3 @@
-// src/data.js
-// Strat de date: clienți demo și configurări inițiale
-
 const STATUS_OPTIONS = ['Lead', 'Activ', 'Inactiv'];
 
 const DEMO_CLIENTS = [
