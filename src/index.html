@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini CRM</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Mini CRM</div>
+        <nav>
+            <a href="#" class="nav-link active">Clienți</a>
+            <a href="#" class="nav-link">Dashboard</a>
+        </nav>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h2>Gestionare Clienți</h2>
+            <button id="addClientBtn">+ Client Nou</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <span id="totalCount">0</span>
+                <label>Total Clienți</label>
+            </div>
+            <div class="stat-card green">
+                <span id="activeCount">0</span>
+                <label>Activi</label>
+            </div>
+            <div class="stat-card blue">
+                <span id="leadCount">0</span>
+                <label>Leads</label>
+            </div>
+            <div class="stat-card gray">
+                <span id="inactiveCount">0</span>
+                <label>Inactivi</label>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder=" Caută după nume sau email..." />
+            <select id="filterStatus">
+                <option value="all">Toate statusurile</option>
+                <option value="Lead">Lead</option>
+                <option value="Activ">Activ</option>
+                <option value="Inactiv">Inactiv</option>
+            </select>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nume</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th>Companie</th>
+                        <th>Status</th>
+                        <th>Acțiuni</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTable">
+                </tbody>
+            </table>
+            <p id="emptyMsg" class="empty-msg">
+                Niciun client găsit. Adaugă primul client!
+            </p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
