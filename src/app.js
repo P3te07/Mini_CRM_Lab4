@@ -15,6 +15,9 @@ const fCompany = document.getElementById('fCompany');
 const fStatus  = document.getElementById('fStatus');
 const fNotes   = document.getElementById('fNotes');
 
+const searchInput = document.getElementById('searchInput');
+const filterSel   = document.getElementById('filterStatus');
+
 
 function renderTable(list) {
   clientTable.innerHTML = '';
@@ -75,7 +78,7 @@ function clearForm() {
 
 function openAddModal() {
   editingId              = null;
-  modalTitle.textContent = '➕ Client Nou';
+  modalTitle.textContent = ' Client Nou';
   clearForm();
   openModal();
 }
@@ -152,7 +155,9 @@ function deleteClient(id) {
 }
 
 function render() {
-  renderTable(clients);
+  const filtered = getFilteredClients();
+  renderTable(filtered);
+  updateStats();      
 }
 
 function escapeHtml(str) {
@@ -164,10 +169,29 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function getFilteredClients() {
+  const query  = searchInput.value.toLowerCase().trim();
+  const status = filterSel.value;
+
+  return clients.filter(client => {
+    const matchesSearch =
+      client.name.toLowerCase().includes(query)  ||
+      client.email.toLowerCase().includes(query) ||
+      (client.company && client.company.toLowerCase().includes(query));
+
+    const matchesStatus =
+      status === 'all' || client.status === status;
+
+    return matchesSearch && matchesStatus;
+  });
+}
+
 addClientBtn.addEventListener('click', openAddModal);
 document.getElementById('cancelBtn').addEventListener('click', closeModal);
 document.getElementById('closeBtn').addEventListener('click', closeModal);
 document.getElementById('saveBtn').addEventListener('click', saveClient);
+searchInput.addEventListener('input', render);
+filterSel.addEventListener('change', render);
 
 modal.addEventListener('click', e => {
   if (e.target === modal) closeModal();
