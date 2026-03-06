@@ -117,11 +117,140 @@ function deleteClient(id) {
   render();
 }
 
-document.getElementById('addClientBtn').addEventListener('click', () => {
-  editingId = null;
-  modalTitle.textContent = 'Client Nou';
-  openModal();
-});
+function render() {
+  const filtered = getFilteredClients();
+  renderTable(filtered);
+  updateStats();      
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function getFilteredClients() {
+  const query  = searchInput.value.toLowerCase().trim();
+  const status = filterSel.value;
+
+  return clients.filter(client => {
+    const matchesSearch =
+      client.name.toLowerCase().includes(query)  ||
+      client.email.toLowerCase().includes(query) ||
+      (client.company && client.company.toLowerCase().includes(query));
+
+    const matchesStatus =
+      status === 'all' || client.status === status;
+
+    return matchesSearch && matchesStatus;
+  });
+}
+
+function updateStats() {
+  const total    = clients.length;
+  const active   = clients.filter(c => c.status === 'Activ').length;
+  const leads    = clients.filter(c => c.status === 'Lead').length;
+  const inactive = clients.filter(c => c.status === 'Inactiv').length;
+
+  animateCount(totalCount,    total);
+  animateCount(activeCount,   active);
+  animateCount(leadCount,     leads);
+  animateCount(inactiveCount, inactive);
+}
+
+function animateCount(el, end) {
+  const start    = parseInt(el.textContent) || 0;
+  if (start === end) return;
+
+  const duration = 400; // ms
+  const steps    = 20;
+  const stepTime = duration / steps;
+  const diff     = end - start;
+  let   current  = start;
+  let   step     = 0;
+
+  const timer = setInterval(() => {
+    step++;
+    current = Math.round(start + (diff * step) / steps);
+    el.textContent = current;
+    if (step >= steps) {
+      el.textContent = end;
+      clearInterval(timer);
+    }
+  }, stepTime);
+}
+
+function validateForm() {
+  const errors = [];
+  const name   = fName.value.trim();
+  const email  = fEmail.value.trim();
+
+  // Reset stare de eroare
+  fName.classList.remove('error-field');
+  fEmail.classList.remove('error-field');
+
+  if (!name) {
+    errors.push('Numele este obligatoriu.');
+    fName.classList.add('error-field');
+  }
+
+  if (!email) {
+    errors.push('Email-ul este obligatoriu.');
+    fEmail.classList.add('error-field');
+  } else if (!isValidEmail(email)) {
+    errors.push('Email-ul nu are un format valid.');
+    fEmail.classList.add('error-field');
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function saveClient() {
+  const { valid, errors } = validateForm();
+
+  if (!valid) {
+    formError.textContent = '⚠️ ' + errors.join(' ');
+    formError.classList.remove('hidden');
+    return;
+  }
+
+  const clientData = {
+    name:    fName.value.trim(),
+    email:   fEmail.value.trim(),
+    phone:   fPhone.value.trim(),
+    company: fCompany.value.trim(),
+    status:  fStatus.value,
+    notes:   fNotes.value.trim()
+  };
+
+  if (editingId !== null) {
+    clients = clients.map(c =>
+      c.id === editingId ? { ...c, ...clientData } : c
+    );
+  } else {
+    clients.push({
+      id:        Date.now(),
+      createdAt: new Date().toISOString().split('T')[0],
+      ...clientData
+    });
+  }
+
+  persistClients(clients);
+  closeModal();
+  render();
+}
+
+addClientBtn.addEventListener('click', openAddModal);
 document.getElementById('cancelBtn').addEventListener('click', closeModal);
 document.getElementById('saveBtn').addEventListener('click', saveClient);
 searchInput.addEventListener('input', render);
