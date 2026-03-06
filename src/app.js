@@ -1,3 +1,4 @@
+//branch bugfix 
 let clients = JSON.parse(localStorage.getItem('crm_clients')) || [...DEMO_CLIENTS];
 let editingId = null;
 
