@@ -18,6 +18,10 @@ const fNotes   = document.getElementById('fNotes');
 const searchInput = document.getElementById('searchInput');
 const filterSel   = document.getElementById('filterStatus');
 
+const totalCount    = document.getElementById('totalCount');
+const activeCount   = document.getElementById('activeCount');
+const leadCount     = document.getElementById('leadCount');
+const inactiveCount = document.getElementById('inactiveCount');
 
 function renderTable(list) {
   clientTable.innerHTML = '';
@@ -184,6 +188,40 @@ function getFilteredClients() {
 
     return matchesSearch && matchesStatus;
   });
+}
+
+function updateStats() {
+  const total    = clients.length;
+  const active   = clients.filter(c => c.status === 'Activ').length;
+  const leads    = clients.filter(c => c.status === 'Lead').length;
+  const inactive = clients.filter(c => c.status === 'Inactiv').length;
+
+  animateCount(totalCount,    total);
+  animateCount(activeCount,   active);
+  animateCount(leadCount,     leads);
+  animateCount(inactiveCount, inactive);
+}
+
+function animateCount(el, end) {
+  const start    = parseInt(el.textContent) || 0;
+  if (start === end) return;
+
+  const duration = 400; // ms
+  const steps    = 20;
+  const stepTime = duration / steps;
+  const diff     = end - start;
+  let   current  = start;
+  let   step     = 0;
+
+  const timer = setInterval(() => {
+    step++;
+    current = Math.round(start + (diff * step) / steps);
+    el.textContent = current;
+    if (step >= steps) {
+      el.textContent = end;
+      clearInterval(timer);
+    }
+  }, stepTime);
 }
 
 addClientBtn.addEventListener('click', openAddModal);
