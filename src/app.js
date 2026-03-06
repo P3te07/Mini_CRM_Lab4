@@ -1,6 +1,7 @@
-//comentariu faorte conflictiv
-let clients   = loadClients();   
-let editingId = null;            
+//branch bugfix 
+let clients = JSON.parse(localStorage.getItem('crm_clients')) || [...DEMO_CLIENTS];
+let editingId = null;
+
 
 const clientTable  = document.getElementById('clientTable');
 const emptyMsg     = document.getElementById('emptyMsg');
@@ -225,6 +226,76 @@ function animateCount(el, end) {
   }, stepTime);
 }
 
+<<<<<<< HEAD
+=======
+function validateForm() {
+  const errors = [];
+  const name   = fName.value.trim();
+  const email  = fEmail.value.trim();
+
+  // Reset stare de eroare
+  fName.classList.remove('error-field');
+  fEmail.classList.remove('error-field');
+
+  if (!name) {
+    errors.push('Numele este obligatoriu.');
+    fName.classList.add('error-field');
+  }
+
+  if (!email) {
+    errors.push('Email-ul este obligatoriu.');
+    fEmail.classList.add('error-field');
+  } else if (!isValidEmail(email)) {
+    errors.push('Email-ul nu are un format valid.');
+    fEmail.classList.add('error-field');
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function saveClient() {
+  const { valid, errors } = validateForm();
+
+  if (!valid) {
+    formError.textContent = '⚠️ ' + errors.join(' ');
+    formError.classList.remove('hidden');
+    return;
+  }
+
+  const clientData = {
+    name:    fName.value.trim(),
+    email:   fEmail.value.trim(),
+    phone:   fPhone.value.trim(),
+    company: fCompany.value.trim(),
+    status:  fStatus.value,
+    notes:   fNotes.value.trim()
+  };
+
+  if (editingId !== null) {
+    clients = clients.map(c =>
+      c.id === editingId ? { ...c, ...clientData } : c
+    );
+  } else {
+    clients.push({
+      id:        Date.now(),
+      createdAt: new Date().toISOString().split('T')[0],
+      ...clientData
+    });
+  }
+
+  persistClients(clients);
+  closeModal();
+  render();
+}
+
+>>>>>>> bugfix
 addClientBtn.addEventListener('click', openAddModal);
 document.getElementById('cancelBtn').addEventListener('click', closeModal);
 document.getElementById('closeBtn').addEventListener('click', closeModal);
