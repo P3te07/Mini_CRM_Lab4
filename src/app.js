@@ -1,5 +1,7 @@
-let clients   = loadClients();   
-let editingId = null;            
+//branch bugfix 
+let clients = JSON.parse(localStorage.getItem('crm_clients')) || [...DEMO_CLIENTS];
+let editingId = null;
+
 
 const clientTable  = document.getElementById('clientTable');
 const emptyMsg     = document.getElementById('emptyMsg');
@@ -229,7 +231,6 @@ function validateForm() {
   const name   = fName.value.trim();
   const email  = fEmail.value.trim();
 
-  // Reset stare de eroare
   fName.classList.remove('error-field');
   fEmail.classList.remove('error-field');
 
