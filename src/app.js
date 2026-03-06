@@ -226,14 +226,11 @@ function animateCount(el, end) {
   }, stepTime);
 }
 
-<<<<<<< HEAD
-=======
 function validateForm() {
   const errors = [];
   const name   = fName.value.trim();
   const email  = fEmail.value.trim();
 
-  // Reset stare de eroare
   fName.classList.remove('error-field');
   fEmail.classList.remove('error-field');
 
@@ -295,7 +292,6 @@ function saveClient() {
   render();
 }
 
->>>>>>> bugfix
 addClientBtn.addEventListener('click', openAddModal);
 document.getElementById('cancelBtn').addEventListener('click', closeModal);
 document.getElementById('closeBtn').addEventListener('click', closeModal);
